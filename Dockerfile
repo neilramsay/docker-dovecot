@@ -1,7 +1,8 @@
 FROM alpine
 
 RUN set -ex && \
-    apk --no-cache add bash openssl ca-certificates dovecot && \
+    apk --no-cache add bash openssl ca-certificates dovecot \
+                       dovecot-pigeonhole-plugin && \
     mkdir /docker-entry.d && \
     sed -i 's!^#log_path = syslog!log_path = /dev/stderr!; \
             s!^#info_log_path =!info_log_path = /dev/stdout!' /etc/dovecot/conf.d/10-logging.conf
@@ -13,8 +14,8 @@ COPY conf/local.conf /docker-entry.d/
 # Note you cannot chmod this properly as its sticky bits are cleared
 VOLUME /var/mail
 
-# Expose IMAP ports
-EXPOSE 143/tcp 993/tcp
+# Expose IMAP, and ManageSieve ports
+EXPOSE 143/tcp 993/tcp 4190/tcp
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["dovecot","-F"]
