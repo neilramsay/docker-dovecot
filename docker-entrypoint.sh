@@ -21,10 +21,10 @@ for f in /docker-entry.d/*; do
                 . "$f" ;;
         local.conf)
                 echo "$0: local.conf file provided. Copying to /etc/dovecot/";
-                cp $f /etc/dovecot/ ;;
+                cp "$f" /etc/dovecot/ ;;
         *.conf)
                 echo "$0: copying conf file '$f' to /etc/dovecot/conf.d/"
-                cp $f /etc/dovecot/conf.d/ ;;
+                cp "$f" /etc/dovecot/conf.d/ ;;
         /docker-entry.d/*) ;;
         *)      echo "$0: ignoring $f -- don't know how to process it" ;;
     esac
@@ -47,6 +47,6 @@ else
 fi
 
 # Replace this entry point script process with the desired program
-echo "End of Entrypoint script. Executing $@"
+echo "End of Entrypoint script. Executing $*"
 echo
 exec "$@"
